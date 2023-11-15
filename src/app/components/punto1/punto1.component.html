@@ -1,0 +1,64 @@
+<div class="text-center mt-4">
+
+    <!-- Button trigger modal -->
+<a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  <i class="bi bi-cart-fill"></i>
+</a>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center" id="exampleModalLabel">Carrito de Compras</h1>
+        </div>
+        <div class="modal-body" *ngFor="let producto of carrito">
+
+          <div class="card mb-3">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <img src="{{producto.img}}" class="img-fluid rounded-start pt-3" alt="Producto">
+              </div>
+              <div class="col-md-8">
+                <p class="card-text">{{producto.nombre}}</p>
+                <p class="card-text">$ {{producto.precio}} ARS</p>
+                <div class="d-inline-flex">
+                  <a type="button" class="btn btn-close-white text-dark" (click)="restar(producto)"><i class="bi bi-dash"></i>
+                  </a>
+                  <h5>{{producto.cantidad}}</h5>
+                  <a type="button" class="btn btn-close-white text-dark" (click)="sumar(producto)"><i class="bi bi-plus"></i>
+                  </a>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Verificar</button>
+          <h5>Total: $ {{totalPagar()}} ARS</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="row row-cols-1 row-cols-md-3 g-5 m-1">
+    <div class="col" *ngFor="let producto of productos">
+        <div class="card text-center">
+            <div class="card-img p-3">
+                <img src="{{producto.img}}" class="card-img-top" alt="..." width="300px" height="300px">
+            </div>
+            
+            <div class="card-body">
+              <h5 class="card-title">{{producto.nombre}}</h5>
+              <p class="card-text">{{producto.descripcion}}</p>
+              <p class="card-text">$ {{producto.precio}}</p>
+              <a href="#" class="btn btn-primary" (click)="agregarProductos(producto)">Agregar al carrito</a>
+            </div>
+          </div>
+      </div>
+</div>  

@@ -1,0 +1,130 @@
+<form class="container mt-5 w-50" #ticketForm="ngForm">
+    <fieldset class="border border-1 border-black rounded-2">
+    <legend class="fw-bold text-center bg-info rounded-top-2" *ngIf="accion=='new'">Registrar Ticket</legend>
+    <legend class="fw-bold text-center bg-success rounded-top-2" *ngIf="accion=='update'">Modificar Ticket</legend>
+    
+    <div class="mb-3 p-1">
+        <label for="dni" class="form-label">DNI</label>
+        <input type="text" class="form-control" id="dni" name="dni" [(ngModel)]="ticket.dni" required #dni="ngModel" dni-correcto minlength="8" maxlength="8" >
+        <div *ngIf="dni.invalid && (dni.dirty || dni.touched)" class="alert alert-danger">
+            <div *ngIf="dni.errors?.['required']">
+                Debe ingresar un dni
+            </div>
+            <div *ngIf="dni.errors?.['minlength']">
+                El dni debe contener 8 digitos
+            </div>
+            <div *ngIf="dni.errors?.['numeroCorrectos']">
+                No se permiten caracteres que no sean numeros.
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3 p-1">
+        <label for="precio" class="form-label">Precio Real</label>
+        <input type="number" class="form-control" id="precio" name="precio" [(ngModel)]="ticket.precioReal" (ngModelChange)="calcularDescuento()" required #precio="ngModel" verificar-Precio>
+        <div *ngIf="precio.invalid && (precio.dirty || precio.touched)" class="alert alert-danger">
+            <div *ngIf="precio.errors?.['required']">
+                Debe ingresar un precio
+            </div>
+            <div *ngIf="precio.errors?.['precioCorrectos']">
+                Debe ingresar un precio mayor a 100
+            </div>
+        </div>
+    </div>
+    
+    <div class="mb-3 p-1">
+        <label for="tipo" class="form-label">Tipo Expectador</label>
+        <select class="form-select" id="tipo" aria-label="Default select example" name="tipo" [(ngModel)]="ticket.tipoEspectador" (ngModelChange)="calcularDescuento()" required #tipo="ngModel">
+            <option selected disabled>Elejir tipo de Expectador</option>
+            <option value="e">Extranjero</option>
+            <option value="l">Local</option>
+        </select>
+        <div *ngIf="tipo.invalid && (tipo.dirty || tipo.touched)" class="alert alert-danger">
+            <div *ngIf="tipo.errors?.['required']">
+                Debe ingresar un tipo
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mb-3 ps-3" *ngIf="ticket.precioReal!=0 && ticket.tipoEspectador!=null && ticket.tipoEspectador=='e'">
+        <label for="precioCobrado" class="form-label">Precio a Cobrar</label>
+        <input type="number" class="form-control w-50" id="precioCobrado" name="precioCobrado" disabled value="{{ticket.precioCobrado}}">
+    </div>
+    
+    <div class="mb-3 ps-3" *ngIf="ticket.precioReal!=0 && ticket.tipoEspectador!=null && ticket.tipoEspectador=='l'">
+        <label for="precioCobrado" class="form-label">Precio a Cobrar con descuento del 20%</label>
+        <input type="number" class="form-control w-50" id="precioCobrado" name="precioCobrado" disabled value="{{ticket.precioCobrado}}">
+    </div>
+
+    <div class="mb-3 text-center" *ngIf="accion=='new'">
+        <button type="input" (click)="guardarTicket()" class="btn btn-primary rounded-2 fw-bold" [disabled]="!ticketForm.valid">Registrar</button>
+    </div>
+
+    <div class="mb-3 text-center" *ngIf="accion=='update'">
+        <div class="row g-0">
+            <div class="col-md-6">
+                <button type="input" (click)="modificarTicket()" class="btn btn-success rounded-2" [disabled]="!ticketForm.valid">Modificar</button>
+            </div>
+            <div class="col-md-6">
+                <button type="input" (click)="cancelarModificacion()" class="btn btn-secondary rounded-2">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    </fieldset>
+</form>
+
+
+<!--    Correcto 
+    <form class="container mt-5 w-50">
+    <fieldset class="border border-1 border-black rounded-2">
+    <legend class="fw-bold text-center bg-info rounded-top-2" *ngIf="accion=='new'">Registrar Ticket</legend>
+    <legend class="fw-bold text-center bg-success rounded-top-2" *ngIf="accion=='update'">Modificar Ticket</legend>
+    
+    <div class="mb-3 p-1">
+        <label for="dni" class="form-label">DNI</label>
+        <input type="text" class="form-control" id="dni" name="dni" [(ngModel)]="ticket.dni" required>
+    </div>
+
+    <div class="mb-3 p-1">
+        <label for="precio" class="form-label">Precio Real</label>
+        <input type="number" class="form-control" id="precio" name="precio" [(ngModel)]="ticket.precioReal" (ngModelChange)="calcularDescuento()" required>
+    </div>
+    
+    <div class="mb-3 p-1">
+        <label for="tipo" class="form-label">Tipo Expectador</label>
+        <select class="form-select" id="tipo" aria-label="Default select example" name="tipo" [(ngModel)]="ticket.tipoEspectador" (ngModelChange)="calcularDescuento()" required>
+            <option selected disabled>Elejir tipo de Expectador</option>
+            <option value="e">Extranjero</option>
+            <option value="l">Local</option>
+        </select>
+    </div>
+
+    <div class="mb-3 ps-3" *ngIf="ticket.precioReal!=0 && ticket.tipoEspectador!=null && ticket.tipoEspectador=='e'">
+        <label for="precioCobrado" class="form-label">Precio a Cobrar</label>
+        <input type="number" class="form-control w-50" id="precioCobrado" name="precioCobrado" disabled value="{{ticket.precioCobrado}}">
+    </div>
+    
+    <div class="mb-3 ps-3" *ngIf="ticket.precioReal!=0 && ticket.tipoEspectador!=null && ticket.tipoEspectador=='l'">
+        <label for="precioCobrado" class="form-label">Precio a Cobrar con descuento del 20%</label>
+        <input type="number" class="form-control w-50" id="precioCobrado" name="precioCobrado" disabled value="{{ticket.precioCobrado}}">
+    </div>
+
+    <div class="mb-3 text-center" *ngIf="accion=='new'">
+        <button type="input" (click)="guardarTicket()" class="btn btn-primary rounded-2 fw-bold">Registrar</button>
+    </div>
+
+    <div class="mb-3 text-center" *ngIf="accion=='update'">
+        <div class="row g-0">
+            <div class="col-md-6">
+                <button type="input" (click)="modificarTicket()" class="btn btn-success rounded-2">Modificar</button>
+            </div>
+            <div class="col-md-6">
+                <button type="input" (click)="cancelarModificacion()" class="btn btn-secondary rounded-2">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    </fieldset>
+</form> -->

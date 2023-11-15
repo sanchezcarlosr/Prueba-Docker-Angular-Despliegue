@@ -1,0 +1,119 @@
+<div class="container mt-5 bg-secondary bg-opacity-50 w-50 p-5 rounded-3" *ngIf="arrayTicket.length===0">
+  <div>
+    <h3 class="text-center fw-bold">Registros de ticket vacio</h3>
+  </div>
+  <div class="container align-content-center text-center">
+    <button type="input" (click)="registrarTicket()" class="btn btn-success rounded-2 fw-bold">Registrar <i class="bi bi-clipboard2-fill"></i></button>
+  </div>
+</div>
+
+
+
+
+<div class="container" *ngIf="arrayTicket.length!==0">
+  
+  <div class="container mt-5">
+    <div class="container align-content-center text-center">
+      <button type="input" (click)="registrarTicket()" class="btn btn-success rounded-2">Registrar <i class="bi bi-clipboard2-fill"></i></button>
+    </div>
+    
+    <div class="container">
+      <table class="table caption-top">
+        <caption class="text-center fw-bold">Lista de ticket registrados</caption>
+        <thead class="bg-secondary text-white">
+          <tr>
+            <th scope="col">N°</th>
+            <th scope="col">DNI</th>
+            <th scope="col">Precio Real</th>
+            <th scope="col">Tipo Espectador</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Precio Cobrado</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of arrayTicket">
+            <th>{{t.id}}</th>
+            <th scope="row">{{t.dni}}</th>
+            <td>{{t.precioReal | currency:'ARS ':true:'1.1-2' }}</td>
+            <td>{{t.tipoEspectador | tipoEspectador}}</td>
+            <td>{{t.fechaCobro | date:'dd/MM/yyyy'}}</td>
+            <td>{{t.precioCobrado | currency:'ARS ':true:'1.1-2'}}</td>
+            <td>
+              <div class="g-0">
+                <button type="input" class="btn btn-danger rounded-2 me-1" (click)="eliminarTicket(t)">Eliminar</button>
+                <button type="input" class="btn btn-warning rounded-2" (click)="modificarTicket(t)">Modificar</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+  
+  <div class="container mt-5">
+
+    <div class="row">
+      <div class="col-md-8 col-12">
+        <div>
+          <h3 class="text-center fw-bold">Filtro de ticket</h3>
+        </div>
+        <div class="container">
+          <div class="mb-3">
+            <label for="tipo" class="form-label">Filtrar por Tipo de Espectador</label>
+            <select class="form-select w-50" id="tipo" aria-label="Default select example" name="tipo" [(ngModel)]="tipo" (ngModelChange)="filtrarTicket()" required>
+                <option selected disabled>Elejir tipo de Expectador</option>
+                <option value="t">Todos</option>
+                <option value="e">Extranjero</option>
+                <option value="l">Local</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="container">
+          <table class="table caption-top">
+            <caption class="text-center fw-bold">Lista de ticket Filtrados</caption>
+            <thead class="bg-secondary bg-opacity-25">
+              <tr>
+                <th scope="col">N°</th>
+                <th scope="col">DNI</th>
+                <th scope="col">Precio Real</th>
+                <th scope="col">Tipo Espectador</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Precio Cobrado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let t of arrayTicketFiltrado">
+                <th>{{t.id}}</th>
+                <th scope="row">{{t.dni}}</th>
+                <td>{{t.precioReal | currency:'ARS ':true:'1.1-2' }}</td>
+                <td>{{t.tipoEspectador | tipoEspectador}}</td>
+                <td>{{t.fechaCobro | date:'dd/MM/yyyy'}}</td>
+                <td>{{t.precioCobrado | currency:'ARS ':true:'1.1-2'}}</td>
+              </tr>
+            </tbody>
+          </table>
+      
+        </div>
+      </div>
+
+      <div class="col-md-4 col-12 text-center">
+          <div class="card mb-3" style="max-width: 18rem;">
+            <div class="card-header bg-primary text-white"><h4 class="fw-bold">Total de tickets</h4></div>
+            <div class="card-body">
+              <h5 class="card-title">Resultado del filtrado</h5>
+              <p class="card-text">Cantidad de tickets registrados: {{tickets}}</p>
+              <p class="card-text">Total en ventas: {{total | currency:'ARS ':true:'1.1-2'}}</p>
+            </div>
+          </div>
+      </div>
+
+    </div>
+
+
+  </div>
+
+</div>
